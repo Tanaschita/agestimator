@@ -7,7 +7,7 @@
 
 import Observation
 
-@Observable
+@Observable @MainActor
 final class AgeEstimatorViewModel {
     // MARK: - Output
 

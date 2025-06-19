@@ -15,7 +15,7 @@ protocol AgeEstimatorAPI {
 
 // MARK: - Live API Implementation
 
-final class LifeAgeEstimatorAPI: AgeEstimatorAPI {
+final class LiveAgeEstimatorAPI: AgeEstimatorAPI {
 
     private let baseURL = URL(string: "https://api.agify.io")!
     private let session: URLSession = .shared

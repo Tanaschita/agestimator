@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AgeEstimatorView: View {
 
+    @State private var viewModel = AgeEstimatorViewModel(api: LiveAgeEstimatorAPI())
     @State private var name: String = ""
 
     var body: some View {
@@ -16,6 +17,7 @@ struct AgeEstimatorView: View {
             titleView
             nameInputField
             estimateButton
+            errorView
             resultView
             Spacer()
         }
@@ -42,7 +44,7 @@ struct AgeEstimatorView: View {
 
     private var estimateButton: some View {
         Button(action: {
-            //
+            viewModel.estimateAge(for: name)
         }) {
             Text("Let's go")
                 .frame(maxWidth: .infinity)
@@ -51,16 +53,29 @@ struct AgeEstimatorView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
         }
-        .disabled(name.isEmpty)
         .padding(.horizontal)
     }
 
     // MARK: - Result View
 
     private var resultView: some View {
-        Text("Estimated age: ?")
-            .font(.title2)
-            .transition(.opacity)
+        if let estimatedAge = viewModel.estimatedAge {
+            Text("Estimated age: \(estimatedAge)")
+                .font(.title2)
+        } else {
+            Text("Estimated age: ?")
+                .font(.title2)
+        }
+    }
+
+    // MARK: - Error View
+
+    @ViewBuilder
+    private var errorView: some View {
+        if let error = viewModel.errorMessage {
+            Text(error)
+                .foregroundColor(.red)
+        }
     }
 }
 
