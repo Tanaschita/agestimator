@@ -38,7 +38,7 @@ final class AgeEstimatorViewModel {
 
         Task {
             do {
-                let request = EstimateAgeRequest(name: name)
+                let request = AgeEstimatorRequest(name: name)
                 let response = try await api.estimateAge(for: request)
                 estimatedAge = response.age
             } catch {

@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Protocol
 
 protocol AgeEstimatorAPI {
-    func estimateAge(for request: EstimateAgeRequest) async throws -> EstimateAgeResponse
+    func estimateAge(for request: AgeEstimatorRequest) async throws -> AgeEstimatorResponse
 }
 
 // MARK: - Live API Implementation
@@ -20,7 +20,7 @@ final class LiveAgeEstimatorAPI: AgeEstimatorAPI {
     private let baseURL = URL(string: "https://api.agify.io")!
     private let session: URLSession = .shared
 
-    func estimateAge(for request: EstimateAgeRequest) async throws -> EstimateAgeResponse {
+    func estimateAge(for request: AgeEstimatorRequest) async throws -> AgeEstimatorResponse {
         guard let url = request.makeURL(with: baseURL) else {
             throw URLError(.badURL)
         }
@@ -42,7 +42,7 @@ final class LiveAgeEstimatorAPI: AgeEstimatorAPI {
     }
 }
 
-// MARK: - Live API Implementation
+// MARK: - Delaying API Implementation
 
 class DelayingAgeEstimatorAPI: AgeEstimatorAPI {
     private let wrapped: AgeEstimatorAPI
@@ -53,7 +53,7 @@ class DelayingAgeEstimatorAPI: AgeEstimatorAPI {
         self.minimumDuration = minimumDuration
     }
 
-    func estimateAge(for request: EstimateAgeRequest) async throws -> EstimateAgeResponse {
+    func estimateAge(for request: AgeEstimatorRequest) async throws -> AgeEstimatorResponse {
         let start = Date()
 
         let result = try await wrapped.estimateAge(for: request)
@@ -67,24 +67,4 @@ class DelayingAgeEstimatorAPI: AgeEstimatorAPI {
 
         return result
     }
-}
-
-
-// MARK: - Request Model
-
-struct EstimateAgeRequest {
-    let name: String
-
-    func makeURL(with baseURL: URL) -> URL? {
-        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
-        components?.queryItems = [URLQueryItem(name: "name", value: name)]
-        return components?.url
-    }
-}
-
-// MARK: - Response Model
-
-struct EstimateAgeResponse: Decodable {
-    let age: Int
-    let name: String
 }
