@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AgeEstimatorView: View {
 
-    @State private var viewModel = AgeEstimatorViewModel(api: LiveAgeEstimatorAPI())
+    @State private var viewModel = AgeEstimatorViewModel(api: DelayingAgeEstimatorAPI(wrapping: LiveAgeEstimatorAPI()))
     @State private var name: String = ""
 
     var body: some View {
@@ -56,6 +56,7 @@ struct AgeEstimatorView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
         }
+        .disabled(viewModel.isLoading)
         .padding(.horizontal)
     }
 

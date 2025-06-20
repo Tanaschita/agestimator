@@ -17,7 +17,7 @@ struct AgeResultView: View {
     @State private var showPulse = false
 
     private let maxAge = 116
-    private let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack(spacing: 15) {
@@ -28,7 +28,7 @@ struct AgeResultView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .foregroundColor(.orange)
-                .scaleEffect(showPulse ? 1.2 : 1.0)
+                .scaleEffect(showPulse ? 1.5 : 1.0)
                 .shadow(color: showPulse ? .orange.opacity(0.4) : .clear, radius: 10)
                 .animation(.easeOut(duration: 0.3), value: showPulse)
         }

@@ -42,6 +42,34 @@ final class LiveAgeEstimatorAPI: AgeEstimatorAPI {
     }
 }
 
+// MARK: - Live API Implementation
+
+class DelayingAgeEstimatorAPI: AgeEstimatorAPI {
+    private let wrapped: AgeEstimatorAPI
+    private let minimumDuration: TimeInterval
+
+    init(wrapping api: AgeEstimatorAPI, minimumDuration: TimeInterval = 1.5) {
+        self.wrapped = api
+        self.minimumDuration = minimumDuration
+    }
+
+    func estimateAge(for request: EstimateAgeRequest) async throws -> EstimateAgeResponse {
+        let start = Date()
+
+        let result = try await wrapped.estimateAge(for: request)
+
+        let elapsed = Date().timeIntervalSince(start)
+        let remaining = minimumDuration - elapsed
+
+        if remaining > 0 {
+            try? await Task.sleep(nanoseconds: UInt64(remaining * 1_000_000_000))
+        }
+
+        return result
+    }
+}
+
+
 // MARK: - Request Model
 
 struct EstimateAgeRequest {
