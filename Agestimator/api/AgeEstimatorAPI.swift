@@ -15,7 +15,8 @@ protocol AgeEstimatorAPI {
 
 // MARK: - Live API Implementation
 
-final class LiveAgeEstimatorAPI: AgeEstimatorAPI {
+/// A real network-based implementation of AgeEstimatorAPI using agify.io.
+class LiveAgeEstimatorAPI: AgeEstimatorAPI {
 
     private let baseURL = URL(string: "https://api.agify.io")!
     private let session: URLSession = .shared
@@ -44,6 +45,7 @@ final class LiveAgeEstimatorAPI: AgeEstimatorAPI {
 
 // MARK: - Delaying API Implementation
 
+/// Wraps any AgeEstimatorAPI and guarantees a minimum execution duration.
 class DelayingAgeEstimatorAPI: AgeEstimatorAPI {
     private let wrapped: AgeEstimatorAPI
     private let minimumDuration: TimeInterval
