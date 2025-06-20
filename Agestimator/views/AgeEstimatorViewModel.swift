@@ -9,6 +9,7 @@ import Observation
 
 @Observable @MainActor
 final class AgeEstimatorViewModel {
+    
     // MARK: - Output
 
     private(set) var estimatedAge: Int? = nil

@@ -18,7 +18,10 @@ struct AgeEstimatorView: View {
             nameInputField
             estimateButton
             errorView
-            resultView
+            AgeResultView(
+                isLoading: viewModel.isLoading,
+                estimatedAge: viewModel.estimatedAge
+            )
             Spacer()
         }
         .padding()
@@ -54,18 +57,6 @@ struct AgeEstimatorView: View {
                 .cornerRadius(10)
         }
         .padding(.horizontal)
-    }
-
-    // MARK: - Result View
-
-    private var resultView: some View {
-        if let estimatedAge = viewModel.estimatedAge {
-            Text("Estimated age: \(estimatedAge)")
-                .font(.title2)
-        } else {
-            Text("Estimated age: ?")
-                .font(.title2)
-        }
     }
 
     // MARK: - Error View
